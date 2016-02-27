@@ -1,0 +1,1 @@
+Die Permission "chatmonitor.command.cm" muss noch in die config des Proxys eingetragen werden.
