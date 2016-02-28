@@ -75,4 +75,39 @@ public class ChatMonitor {
 		sc.close();
 	}
 	
+	@SuppressWarnings("deprecation")
+	public static boolean checkHTTPAdress(String msg, ProxiedPlayer p){
+		
+		msg = msg.toLowerCase();
+		
+		if(msg.contains(main.config.getString("Config.Server_Adress").toLowerCase())){
+			return false;
+		}
+		
+		if(msg.contains("http") || msg.contains("www") || msg.contains(".de") ||
+		   msg.contains(".com") || msg.contains(".net")|| msg.contains(".tv")){
+			
+			p.sendMessage(main.config.getString("Config.http_warn"));
+			
+			if(main.config.getBoolean("Config.write_http_inChatLog")){
+				if(main.ChatLog){
+					String PlayerLog = " ";
+					
+					if(!(main.Logyml.getString("ChatLog."+p.getName()) == null)){
+						PlayerLog = main.Logyml.getString("ChatLog."+p.getName());
+					}
+					
+					PlayerLog += "#-# "+msg;
+					
+					main.Logyml.set("ChatLog."+p.getName(), PlayerLog);
+					try {ConfigurationProvider.getProvider(YamlConfiguration.class).save(main.Logyml, main.file);}catch (IOException r){}
+				}
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

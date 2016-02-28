@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -57,9 +56,13 @@ public class main extends Plugin implements Listener{
 				config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 				
 				config.set("Config.Enable", true);
-				config.set("Config.msg_verstoss", "§cWir möchten hier solche Wörter nicht!");
+				config.set("Config.blacklist_warn", "§cWir möchten hier solche Wörter nicht!");
 				config.set("Config.chat_log", false);
 				config.set("Config.send_blocked_message", true);
+				config.set("Config.allow_htttp-adress", true);
+				config.set("Config.http_warn", "§cWir möchten hier keine Werbung!");
+				config.set("Config.write_http_inChatLog", true);
+				config.set("Config.Server_Adress", "###");
 				
 				ConfigurationProvider.getProvider(YamlConfiguration.class).save(main.config, main.file_config);
 				
@@ -85,14 +88,22 @@ public class main extends Plugin implements Listener{
 			String msg = ChatMonitor.checkBlackList(e);
 			
 			if(!(msg == e.getMessage())){
-				p.sendMessage("§c" + config.getString("Config.msg_verstoss"));
+				p.sendMessage("§c" + config.getString("Config.blacklist_warn"));
 				
 				if(!config.getBoolean("Config.send_blocked_message")){
 					e.setCancelled(true);
+					return;
 				}
+			}else{
+				ChatMonitor.checkSupport(msg, p);
 			}
 			
-			ChatMonitor.checkSupport(msg, p);
+			if(config.getBoolean("Config.allow_htttp-adress") == false){
+				if(ChatMonitor.checkHTTPAdress(msg, p)){
+					e.setCancelled(true);
+					return;
+				}
+			}
 			
 			e.setMessage(msg);
 		}
