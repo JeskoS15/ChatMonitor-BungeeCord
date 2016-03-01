@@ -1,5 +1,5 @@
 name: ChatMonitor
-version: 1.4
+version: 1.5
 author: JeskoS
 main: de.jesko.chatmonitor.main
 commands:

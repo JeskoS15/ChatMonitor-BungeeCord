@@ -59,10 +59,12 @@ public class main extends Plugin implements Listener{
 				config.set("Config.blacklist_warn", "§cWir möchten hier solche Wörter nicht!");
 				config.set("Config.chat_log", false);
 				config.set("Config.send_blocked_message", true);
-				config.set("Config.allow_htttp-adress", true);
+				config.set("Config.is_htttp-adress_allow", true);
 				config.set("Config.http_warn", "§cWir möchten hier keine Werbung!");
 				config.set("Config.write_http_inChatLog", true);
 				config.set("Config.Server_Adress", "###");
+				config.set("Config.is_CapsLock_allow", true);
+				config.set("Config.capslock_warn", "§cBitte schreibe nicht mit aktivierten Caps Lock!");
 				
 				ConfigurationProvider.getProvider(YamlConfiguration.class).save(main.config, main.file_config);
 				
@@ -94,16 +96,23 @@ public class main extends Plugin implements Listener{
 					e.setCancelled(true);
 					return;
 				}
-			}else{
-				ChatMonitor.checkSupport(msg, p);
 			}
 			
-			if(config.getBoolean("Config.allow_htttp-adress") == false){
+			if(config.getBoolean("Config.is_htttp-adress_allow") == false){
 				if(ChatMonitor.checkHTTPAdress(msg, p)){
 					e.setCancelled(true);
 					return;
 				}
 			}
+			
+			if(config.getBoolean("Config.is_CapsLock_allow") == false){
+				if(ChatMonitor.checkCapslock(msg, p)){
+					e.setCancelled(true);
+					return;
+				}
+			}
+			
+			ChatMonitor.checkSupport(msg, p);
 			
 			e.setMessage(msg);
 		}

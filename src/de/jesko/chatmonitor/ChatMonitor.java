@@ -110,4 +110,17 @@ public class ChatMonitor {
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
+	public static boolean checkCapslock(String msg, ProxiedPlayer p){
+		
+		String msgUpper = msg.toUpperCase();
+		
+		if(msg == msgUpper){
+			p.sendMessage(main.config.getString("Config.capslock_warn"));
+			return true;
+		}
+		
+		return false;
+	}
+	
 }
